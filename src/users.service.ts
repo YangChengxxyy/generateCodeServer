@@ -22,7 +22,7 @@ export class UsersService {
     await this.usersRepository.delete(id);
   }
 
-  async findFirstName(firstName: string) {
-    return this.usersRepository.findOneBy({ firstName });
+  async findFirstName(username: string) {
+    return this.usersRepository.findOneBy({ username });
   }
 }
