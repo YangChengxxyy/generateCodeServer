@@ -1,18 +1,24 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
+import { CodeError, LoginParam } from './interface';
 
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get('/users')
-  findAll(): Promise<User[]> {
-    return this.usersService.findAll();
-  }
-
-  @Get('/yang')
-  findYang(): Promise<User> {
-    return this.usersService.findFirstName('yang');
+  @Post('/login')
+  async findAll(@Body() param: LoginParam): Promise<User | null> {
+    if (param === null) {
+      throw new CodeError('USER NOT FOUND', 'ILLEGAL_PARAM');
+    }
+    const res = await this.usersService.findUsernamePassword(param);
+    if (res === null) {
+      throw new CodeError(
+        `USER:${JSON.stringify(param)} NOT FOUND`,
+        'USER_NOT_FOUNT',
+      );
+    }
+    return res;
   }
 }

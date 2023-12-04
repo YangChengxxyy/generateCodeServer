@@ -13,11 +13,15 @@ export class ErrorsInterceptor implements NestInterceptor {
   intercept(
     _: ExecutionContext,
     next: CallHandler,
-  ): Observable<{ success: false; error: any }> {
+  ): Observable<{ success: false; error: any; errorCode?: any }> {
     return next.handle().pipe(
       catchError(async (err) => {
         Logger.error(err.stack);
-        return { success: false, error: err.stack };
+        return {
+          success: false,
+          error: err.message || err.stack,
+          errorCode: err.code,
+        } as const;
       }),
     );
   }
