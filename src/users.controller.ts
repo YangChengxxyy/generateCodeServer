@@ -3,7 +3,7 @@ import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { CodeError, LoginParam } from './interface';
 
-@Controller()
+@Controller('/api')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
